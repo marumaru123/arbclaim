@@ -31,12 +31,17 @@ async function claim(owner, private_key) {
     let code     = await method.encodeABI();
     let gas      = await method.estimateGas({from: owner});
     let gasPrice = await web3.eth.getGasPrice();
+    //let tip      = await web3.eth.getMaxPriorityFeePerGas();
+    //let block    = await web3.eth.getBlock("pending");
+    //const baseFee = Number(block.baseFeePerGas);
+    //const max     = Number(tip) + baseFee - 1;
     const tx = {
         gas: gas + 50000,
         gasPrice: gasPrice,
+	//maxPriorityFeePerGas: Number(tip),
+	//maxFeePerGas: max,
         nonce: nonce,
         chainId: CHAIN_ID,
-        //to: owner,
         to: CONTRACT_ADDRESS,
         data: code
     };

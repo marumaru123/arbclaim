@@ -29,6 +29,10 @@ async function setRecipients(owner, private_key, address, amount) {
     let code     = await method.encodeABI();
     let gas      = await method.estimateGas({from: owner});
     let gasPrice = await web3.eth.getGasPrice();
+    //let tip      = await web3.eth.getMaxPriorityFeePerGas();
+    //let block    = await web3.eth.getBlock("pending");
+    //const baseFee = Number(block.baseFeePerGas);
+    //const max     = Number(tip) + baseFee - 1; // less than the sum
     const tx = {
         gas: gas + 50000,
         gasPrice: gasPrice,
@@ -45,5 +49,5 @@ async function setRecipients(owner, private_key, address, amount) {
 }
 
 (async function main() {
-    await setRecipients(SEND_ADDR, PRIVATE_KEY, "0x613bc97B55BC1E1F4cA08Ac3F7F7da1d890798a9", 10000000000000); 
+    await setRecipients(SEND_ADDR, PRIVATE_KEY, "0x2293FCe6826010f16080c70AD6b9976232C49DEE", 10000000000000); 
 })();
