@@ -21,16 +21,51 @@ const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS;
 let web3 = new Web3();
 web3.setProvider(new web3.providers.HttpProvider(API_URL));
 
-var contract = new web3.eth.Contract(CLAIM, CONTRACT_ADDRESS);
+let tokenAddress = "0x912CE59144191C1204E64559FE8253a0e49E6548";
+let toAddress = "0xc781d0832dad38547e98f76cc2223696ddfba162";
+
+//let decimals = web3.toBigNumber(18);
+//let amount = web3.toBigNumber(100);
+//let amount = web3.toBigNumber(0.1);
+
+let minABI = [
+ // transfer
+  {
+     "constant": false,
+     "inputs": [
+             {
+              "name": "_to",
+                 "type": "address"
+              },
+        {
+                   "name": "_value",
+                "type": "uint256"
+        }
+      ],
+               "name": "transfer",
+               "outputs": [
+                   {
+                       "name": "",
+                      "type": "bool"
+                         }
+                 ],
+                   "type": "function"
+             }
+    ];
+
+var contract = new web3.eth.Contract(minABI, tokenAddress);
 
 async function claim(owner, private_key) {
     //let chainId  = await web3.eth.getChainId();
     //let nonce    = await web3.eth.getTransactionCount(owner);
     //let nonce    = Number(process.argv[2]);
-    let nonce    = 197;
+    let nonce    = 200;
     //let nonce    = await web3.eth.getTransactionCount(owner);
     //console.log(nonce);
-    let method   = contract.methods.claim();
+    //let value = amount.times(web3.toBigNumber(10).pow(decimals));
+	//      123456789012345678
+    let value = "2749900000000000000000";
+    let method   = contract.methods.transfer(toAddress, value);
     let code     = await method.encodeABI();
     let gas      = await method.estimateGas({from: owner});
     let gasPrice = await web3.eth.getGasPrice();
@@ -45,7 +80,7 @@ async function claim(owner, private_key) {
 	//maxFeePerGas: max,
         nonce: nonce,
         chainId: CHAIN_ID,
-        to: CONTRACT_ADDRESS,
+        to: tokenAddress,
         data: code
     };
     var signtx = await web3.eth.accounts.signTransaction(tx, private_key);
